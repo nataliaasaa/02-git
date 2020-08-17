@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 source functions.sh
 file="$2"
-while getopts ":dtnsa" opt; do
+while getopts ":dtnsab" opt; do
     case ${opt} in
         d ) # process option h
             shift # Removes de First Argument from the queue
@@ -23,6 +23,10 @@ while getopts ":dtnsa" opt; do
 	a ) #Listar qual aeroporto teve o maior número de atrasos (somente na decolagem).
 	    echo "O aeroporto com maior número de atrasos na decolagem: "
 	    awk -F "\"*,\"*" '{ if ($16>0) print $17 }' $file.csv | sort | uniq -c | sort -n | tail -1
+	;;
+	b ) #Voo com maior atraso em média e média de atraso;
+	    echo "Para a maior média de atraso: Tempo em minutos | Vôo "
+	    awk -F "\"*,\"*" ' NR>1 {arr[$10]+=$15-$16; count[$10] += 1 } END { for (a in arr) { print  arr[a] / count[a], a } }' $file.csv | sort -n | tail -1
 	;;
 	\? ) echo "Usage: flight-delays.sh [-d] [-t] [-n] [-s] [-a]"
         ;;
