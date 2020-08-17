@@ -1,0 +1,6 @@
+k ) # lista de companhia aerea com atraso
+            a=`awk -F "\"*,\"*" '{ if ($15>0) print $9 }' $file.csv | sort | uniq -w 3` 
+            b=`awk -F "\"*,\"*" '{ print $1 }' carriers.csv`
+            echo "Lista de companhias aereas com atraso no ano indicado: "
+            awk -F "\"*,\"*" '{ if ($a == $b) print $2 }' airports.csv
+        ;;
